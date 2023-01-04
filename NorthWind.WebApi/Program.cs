@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using NorthWind.Entities.Exceptions;
 using NorthWind.IoC;
 using NorthWind.Repositories.EFCore.DataContext;
 using NorthWind.WebExceptionsPresenter;
@@ -11,16 +10,7 @@ builder.Services.AddDbContext<NorthWindContext>(options =>
 
 // Add services to the container.
 
-builder.Services.AddControllers(options =>
-{
-	options.Filters.Add(new ApiExceptionFilterAttribute(
-		new Dictionary<Type, IExceptionHandler>
-		{
-			{typeof(GeneralException), new GeneralExceptionHandler()},
-			{typeof(ValidationExceptionHandler), new ValidationExceptionHandler() }
-		}
-		));
-});
+builder.Services.AddControllers(Filters.Register);
 
 builder.Services.AddNorthWindServices(builder.Configuration);
 

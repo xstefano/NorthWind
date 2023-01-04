@@ -5,7 +5,7 @@ using NorthWind.Entities.POCOEntities;
 
 namespace NorthWind.UseCases.CreateOrder
 {
-	public class CreateOrderInteractor : IRequestHandler<CreateOrderInputPort, int>
+	public class CreateOrderInteractor : AsyncRequestHandler<CreateOrderInputPort>
 	{
 		private readonly IOrderRepository OrderRepository;
 		private readonly IOrderDetailRepository OrderDetailRepository;
@@ -17,17 +17,17 @@ namespace NorthWind.UseCases.CreateOrder
 			(OrderRepository, OrderDetailRepository, UnitOfWork) =
 			(orderRepository, orderDetailRepository, unitOfWork);
 
-		public async Task<int> Handle(CreateOrderInputPort request, 
+		protected async override Task Handle(CreateOrderInputPort request, 
 			CancellationToken cancellationToken)
 		{
 			Order Order = new Order
 			{
-				CustomerId = request.CustomerId,
+				CustomerId = request.RequestData.CustomerId,
 				OrderDate = DateTime.Now,
-				ShipAddress = request.ShipAddress,
-				ShipCity = request.ShipCity,
-				ShipCountry = request.ShipCountry,
-				ShipPostalCode = request.ShipPostalCode,
+				ShipAddress = request.RequestData.ShipAddress,
+				ShipCity = request.RequestData.ShipCity,
+				ShipCountry = request.RequestData.ShipCountry,
+				ShipPostalCode = request.RequestData.ShipPostalCode,
 				ShippingType = Entities.Enums.ShippingType.Road,
 				DiscountType = Entities.Enums.DiscountType.Percentage,
 				DiscountAmount = 10
@@ -35,7 +35,7 @@ namespace NorthWind.UseCases.CreateOrder
 
 			OrderRepository.Create(Order);
 
-			foreach(var Item in request.OrderDetails)
+			foreach(var Item in request.RequestData.OrderDetails)
 			{
 				OrderDetailRepository.Create(
 					new OrderDetail
@@ -56,7 +56,7 @@ namespace NorthWind.UseCases.CreateOrder
 				throw new GeneralException("Error when creating the order.",
 					ex.Message);
 			}
-			return Order.Id;
+			request.OutputPort.Handle(Order.Id);
 		}
 	}
 }
