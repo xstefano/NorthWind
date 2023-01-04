@@ -1,33 +1,42 @@
-﻿using MediatR;
+﻿using FluentValidation;
 using NorthWind.Entities.Exceptions;
 using NorthWind.Entities.Interfaces;
 using NorthWind.Entities.POCOEntities;
+using NorthWind.UseCases.Common.Validators;
+using NorthWind.UseCasesDTOs.CreateOrder;
+using NorthWind.UseCasesPorts.CreateOrder;
 
 namespace NorthWind.UseCases.CreateOrder
 {
-	public class CreateOrderInteractor : AsyncRequestHandler<CreateOrderInputPort>
+	public class CreateOrderInteractor : ICreateOrderInputPort
 	{
 		private readonly IOrderRepository OrderRepository;
 		private readonly IOrderDetailRepository OrderDetailRepository;
 		private readonly IUnitOfWork UnitOfWork;
+		private readonly ICreateOrderOutputPort OutputPort;
+		private readonly IEnumerable<IValidator<CreateOrderParams>> Validators;
 
 		public CreateOrderInteractor(IOrderRepository orderRepository,
 			IOrderDetailRepository orderDetailRepository,
-			IUnitOfWork unitOfWork) =>
-			(OrderRepository, OrderDetailRepository, UnitOfWork) =
-			(orderRepository, orderDetailRepository, unitOfWork);
+			IUnitOfWork unitOfWork,
+			ICreateOrderOutputPort outputPort,
+			IEnumerable<IValidator<CreateOrderParams>> validators) =>
+			(OrderRepository, OrderDetailRepository, UnitOfWork, OutputPort, Validators) =
+			(orderRepository, orderDetailRepository, unitOfWork, outputPort, validators);
 
-		protected async override Task Handle(CreateOrderInputPort request, 
-			CancellationToken cancellationToken)
+		public async Task Handle(CreateOrderParams order)
 		{
+			await Validator<CreateOrderParams>.Validate(order, Validators);
+
+
 			Order Order = new Order
 			{
-				CustomerId = request.RequestData.CustomerId,
+				CustomerId = order.CustomerId,
 				OrderDate = DateTime.Now,
-				ShipAddress = request.RequestData.ShipAddress,
-				ShipCity = request.RequestData.ShipCity,
-				ShipCountry = request.RequestData.ShipCountry,
-				ShipPostalCode = request.RequestData.ShipPostalCode,
+				ShipAddress = order.ShipAddress,
+				ShipCity = order.ShipCity,
+				ShipCountry = order.ShipCountry,
+				ShipPostalCode = order.ShipPostalCode,
 				ShippingType = Entities.Enums.ShippingType.Road,
 				DiscountType = Entities.Enums.DiscountType.Percentage,
 				DiscountAmount = 10
@@ -35,7 +44,7 @@ namespace NorthWind.UseCases.CreateOrder
 
 			OrderRepository.Create(Order);
 
-			foreach(var Item in request.RequestData.OrderDetails)
+			foreach (var Item in order.OrderDetails)
 			{
 				OrderDetailRepository.Create(
 					new OrderDetail
@@ -56,7 +65,7 @@ namespace NorthWind.UseCases.CreateOrder
 				throw new GeneralException("Error when creating the order.",
 					ex.Message);
 			}
-			request.OutputPort.Handle(Order.Id);
+			await OutputPort.Handle(Order.Id);
 		}
 	}
 }

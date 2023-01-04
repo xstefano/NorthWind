@@ -7,13 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NorthWind.UseCasesDTOs\NorthWind.UseCasesDTOs.csproj" />
-    <ProjectReference Include="..\NorthWind.UseCasesPorts\NorthWind.UseCasesPorts.csproj" />
-    <ProjectReference Include="..\Product\NorthWind.Entities.csproj" />
   </ItemGroup>
 
 </Project>

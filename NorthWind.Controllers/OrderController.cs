@@ -1,8 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NorthWind.Presenters;
-using NorthWind.UseCases.CreateOrder;
 using NorthWind.UseCasesDTOs.CreateOrder;
+using NorthWind.UseCasesPorts.CreateOrder;
 
 namespace NorthWind.Controllers
 {
@@ -10,20 +9,21 @@ namespace NorthWind.Controllers
 	[ApiController]
 	public class OrderController
 	{
-		private readonly IMediator Mediator;
+		private readonly ICreateOrderInputPort InputPort;
+		private readonly ICreateOrderOutputPort OutputPort;
 
-		public OrderController(IMediator mediator)
+		public OrderController(ICreateOrderInputPort inputPort, ICreateOrderOutputPort outputPort)
 		{
-			Mediator = mediator;
+			InputPort = inputPort;
+			OutputPort = outputPort;
 		}
 
 		[HttpPost("create-order")]
 		public async Task<ActionResult<string>> CreateOrder(
 			CreateOrderParams orderparams)
 		{
-			CreateOrderPresenter Presenter = new CreateOrderPresenter();
-
-			await Mediator.Send(new CreateOrderInputPort(orderparams, Presenter));
+			await InputPort.Handle(orderparams);
+			var Presenter = OutputPort as CreateOrderPresenter;
 			return Presenter.Content;
 		}
 	}

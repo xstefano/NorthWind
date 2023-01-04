@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{3C089B0F-378B-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthWind.WebApi", "NorthWind.WebApi\NorthWind.WebApi.csproj", "{F2CD5E31-8EBD-41E8-A0BF-3E47C4F2B88D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthWind.UseCasesPorts", "NorthWind.UseCasesPorts\NorthWind.UseCasesPorts.csproj", "{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{F2CD5E31-8EBD-41E8-A0BF-3E47C4F2B88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2CD5E31-8EBD-41E8-A0BF-3E47C4F2B88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2CD5E31-8EBD-41E8-A0BF-3E47C4F2B88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{9C7F1D32-F37C-407D-A690-3718462EE6D3} = {7D7C2F9B-67ED-408C-941C-83CE6DDA12C6}
 		{3C089B0F-378B-4D84-9A1C-87EF318D9943} = {3072D093-D9E5-48A4-8B2A-3953E68516DB}
 		{F2CD5E31-8EBD-41E8-A0BF-3E47C4F2B88D} = {3C089B0F-378B-4D84-9A1C-87EF318D9943}
+		{8613BA69-2D9F-43D4-B944-A1CBE59D7BE0} = {380411AE-48AE-4EB2-9619-58CE4B340CBC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20D18FE6-8340-4DB7-81A2-7CAFDD033DBF}
